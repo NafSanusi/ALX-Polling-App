@@ -25,3 +25,19 @@ This project was a masterclass in effective AI collaboration. I learned that **p
 **Reviewing AI-generated code is non-negotiable.** I learned to treat the AI's output as a first draft from a junior developer—conceptually sound but potentially naive about project-specific patterns. I had to be vigilant about checking for adherence to my rules, such as the correct use of the Supabase client or the API route structure.
 
 Finally, **iteration is the key to success.** The development process became a rapid cycle of prompt, review, and refine. When the AI produced code that was close but not quite right, the most effective approach was not to start over, but to provide a corrective prompt. For example, after it generated a server component that caused a cookie-related error, the follow-up prompt "That caused a 'Cookies can only be modified...' error" led it to the correct `createServerComponentClient` function. This iterative dialogue proved to be the most efficient way to guide the AI to the perfect solution.
+
+### AI-Powered Code Review (CodeRabbit) and Gemini Code Assistant
+
+**PR:** feat/poll-api → main  
+**Tool:** CodeRabbit (GitHub App)
+
+**AI Feedback:**
+
+- Validate inputs with `.trim()` to avoid empty strings.
+- Add clearer error responses for Supabase insert failures.
+- Use consistent `status` codes (400 for invalid, 500 for server errors).
+
+**Action Taken:**
+
+- Updated validation in `app/api/create-poll/route.ts`.
+- Improved error handling and messages.
