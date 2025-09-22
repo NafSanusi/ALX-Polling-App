@@ -1,36 +1,82 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ALX Polling App
+
+This is a full-stack polling application built with Next.js and Supabase. It allows users to register, log in, and create, view, vote on, edit, and delete polls.
 
 ## Getting Started
 
-First, run the development server:
+Follow these instructions to get a local copy of the project up and running for development and testing purposes.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+### Prerequisites
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- Node.js (v18 or later recommended)
+- npm, yarn, or pnpm
+- A Supabase account and project
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Setup
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1.  **Clone the repository:**
 
-## Learn More
+    ```bash
+    git clone https://github.com/NafSanusi/ALX-Polling-App.git
+    cd alx-polling-app
+    ```
 
-To learn more about Next.js, take a look at the following resources:
+2.  **Install dependencies:**
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+    ```bash
+    npm install
+    # or
+    yarn install
+    # or
+    pnpm install
+    ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+3.  **Set up environment variables:**
+    Create a new file named `.env.local` in the root of your project and add your Supabase project credentials. You can find these in your Supabase project's "API" settings.
 
-## Deploy on Vercel
+    ```
+    NEXT_PUBLIC_SUPABASE_URL=your-supabase-project-url
+    NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
+    ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+4.  **Set up the database:**
+    Navigate to the SQL Editor in your Supabase project dashboard and run the SQL script located in `supabase/schema.sql` (or wherever you have saved your schema) to create the `polls`, `poll_options`, and `votes` tables, along with their respective policies.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+5.  **Run the development server:**
+    ```bash
+    npm run dev
+    # or
+    yarn dev
+    # or
+    pnpm dev
+    ```
+
+Open http://localhost:3000 with your browser to see the result.
+
+## Features Implemented
+
+- **User Authentication**: Secure user registration and login using Supabase Auth.
+- **Email Confirmation**: New user accounts require email verification.
+- **Protected Routes**: Middleware protects application routes, redirecting unauthenticated users to the login page.
+- **Poll Creation**: Authenticated users can create new polls with a question and multiple options.
+- **Poll Dashboard**: View a list of all polls, fetched from the database.
+- **Poll Management**: Users can edit (via a modal) and delete the polls they have created.
+- **Voting System**: Users can vote on polls (implementation in progress).
+
+## Technologies Used
+
+- **Framework**: Next.js (App Router)
+- **Backend & Database**: Supabase
+- **Styling**: Tailwind CSS
+- **UI Components**: shadcn/ui
+- **Language**: TypeScript
+
+## Notes on AI Usage
+
+This project was developed with the assistance of an AI coding assistant, **Gemini Code Assist**. The AI was used in the following contexts:
+
+- **Boilerplate Code Generation**: Generating initial code for components, API routes, and database schemas.
+- **Refactoring**: Improving code structure, such as refactoring a form to handle individual validation errors.
+- **Debugging**: Identifying and fixing bugs, such as authentication issues between client/server components and "405 Method Not Allowed" errors in API routes.
+- **Feature Implementation**: Scaffolding new features like the edit/delete functionality and the associated modals and API endpoints.
+- **Documentation**: Generating and updating this `README.md` file.
