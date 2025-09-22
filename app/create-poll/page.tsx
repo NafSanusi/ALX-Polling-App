@@ -1,8 +1,9 @@
-import PollForm from "@/components/PollForm";
-import { supabase } from "@/lib/supabaseClient";
+import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
+import { PollForm } from "./PollForm";
 
-const CreatePollPage = async () => {
+export default async function CreatePollPage() {
+  const supabase = createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -17,6 +18,4 @@ const CreatePollPage = async () => {
       <PollForm />
     </main>
   );
-};
-
-export default CreatePollPage;
+}

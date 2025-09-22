@@ -16,6 +16,7 @@
 
 - Return JSON with `NextResponse.json()` for API responses
 - Avoid redirects except for OAuth flows
+- Don't create an action.ts file when working on backend. Create a route.ts file in a named folder that explains the feature in the app/api folder.
 
 ## TypeScript & Components
 

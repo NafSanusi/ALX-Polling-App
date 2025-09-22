@@ -1,5 +1,6 @@
 "use client";
 
+import { use } from "react";
 import PollDetails from "@/components/PollDetails";
 
 // Dummy data for demonstration
@@ -27,9 +28,10 @@ const polls = [
 export default function PollDetailsPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
-  const poll = polls.find((p) => p.id === params.id);
+  const resolvedParams = use(params);
+  const poll = polls.find((p) => p.id === resolvedParams.id);
 
   if (!poll) {
     return (
@@ -39,7 +41,6 @@ export default function PollDetailsPage({
     );
   }
 
-  // Dummy vote handler
   const handleVote = (optionIndex: number) => {
     alert(`You voted for: ${poll.options[optionIndex]}`);
     // Implement vote logic here
