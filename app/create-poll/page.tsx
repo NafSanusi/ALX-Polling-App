@@ -1,13 +1,15 @@
-import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import { PollForm } from "./PollForm";
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+import { cookies } from "next/headers";
 
 export default async function CreatePollPage() {
-  const supabase = createClient();
+  const cookieStore = cookies();
+  const supabase = createServerComponentClient({ cookies: () => cookieStore });
   const {
     data: { user },
   } = await supabase.auth.getUser();
-
+  console.log(user, "the user");
   if (!user) {
     redirect("/login");
   }

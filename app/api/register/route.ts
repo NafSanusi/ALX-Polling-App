@@ -13,6 +13,20 @@ export async function POST(request: Request) {
       cookies: () => cookieStore,
     });
 
+    // Check if user with this email already exists
+    const { data: existingUser, error: existingUserError } = await supabase
+      .from("users")
+      .select("id")
+      .eq("email", email)
+      .single();
+
+    if (existingUser) {
+      return NextResponse.json(
+        { error: "User with this email already exists." },
+        { status: 409 }
+      ); // 409 Conflict
+    }
+
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
