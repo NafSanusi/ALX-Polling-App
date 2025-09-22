@@ -1,49 +1,42 @@
-"use client";
-
-import { use } from "react";
 import PollDetails from "@/components/PollDetails";
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+import { cookies } from "next/headers";
+import { notFound } from "next/navigation";
 
-// Dummy data for demonstration
-const polls = [
-  {
-    id: "1",
-    question: "What's your favorite color?",
-    options: ["Red", "Blue", "Green"],
-    votes: [5, 3, 2],
-  },
-  {
-    id: "2",
-    question: "Which programming language do you prefer?",
-    options: ["JavaScript", "Python", "Go"],
-    votes: [7, 4, 1],
-  },
-  {
-    id: "3",
-    question: "Do you like remote work?",
-    options: ["Yes", "No"],
-    votes: [8, 2],
-  },
-];
-
-export default function PollDetailsPage({
+export default async function PollDetailsPage({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: { id: string };
 }) {
-  const resolvedParams = use(params);
-  const poll = polls.find((p) => p.id === resolvedParams.id);
+  const cookieStore = cookies();
+  const supabase = createServerComponentClient({ cookies: () => cookieStore });
 
-  if (!poll) {
-    return (
-      <main className="p-8">
-        <h1 className="text-2xl font-bold mb-6">Poll Not Found</h1>
-      </main>
-    );
+  const { data: pollData, error } = await supabase
+    .from("polls")
+    .select(
+      `
+    id,
+    question,
+    poll_options (
+      id,
+      option_text,
+      votes!votes_poll_option_id_fkey (*)
+    )
+  `
+    )
+    .eq("id", params.id) // filter by poll id
+    .single();
+
+  if (error || !pollData) {
+    notFound();
   }
 
-  const handleVote = (optionIndex: number) => {
-    alert(`You voted for: ${poll.options[optionIndex]}`);
-    // Implement vote logic here
+  // Transform the data to fit the PollDetails component props
+  const poll = {
+    id: pollData.id,
+    question: pollData.question,
+    options: pollData.poll_options.map((opt) => opt.option_text),
+    votes: pollData.poll_options.map((opt) => opt.votes[0]?.count ?? 0),
   };
 
   return (
@@ -52,7 +45,6 @@ export default function PollDetailsPage({
         question={poll.question}
         options={poll.options}
         votes={poll.votes}
-        onVote={handleVote}
       />
     </main>
   );
